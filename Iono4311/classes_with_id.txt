@@ -1,0 +1,6 @@
+1 E
+2 Es-l
+3 Es-c
+4 F1
+5 F2
+6 Spread-F

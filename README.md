@@ -1,1 +1,0 @@
-# ionogram_detection
