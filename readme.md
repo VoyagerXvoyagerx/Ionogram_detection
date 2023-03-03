@@ -1,4 +1,4 @@
-# 基于YOLO系列算法的频高图度量benchmark
+# 基于 YOLO 系列算法的频高图度量 benchmark
 
 ## 数据集构建
 
@@ -28,7 +28,7 @@ Iono4311/
 
 标注图像预览
 
-<img width="40%" src="/home/ubuntu/OpenMMLabCamp/detection/ionogram_detection/20130401070700.jpg"/>
+<img width="40%" src="./figures/20130401070700.jpg"/>
 
 1. 数据集格式转换
 
@@ -91,9 +91,7 @@ python tools/analysis_tools/dataset_analysis.py configs/custom_dataset/yolov5_s-
                                                 --out-dir output
 ```
 
-<img width="40%" src="/home/ubuntu/OpenMMLabCamp/detection/ionogram_detection/Dataset_bbox_area.jpg"/>
-
-![可视化分析](/detection/ionogram_detection/Dataset_bbox_area.jpg)
+<img width="40%" src="./figures/Dataset_bbox_area.jpg"/>
 
 E、Es-l、Esc、F1类别以小目标居多，F2、Fspread类主要是中等大小目标。
 
@@ -125,7 +123,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5_m-v6
 | Flip   |                 |                  |                  | √                |
 | 可视化 |  # 2019111215300 | # 20191105223000 | # 20191216074500 | # 20191103063000 |
 
-<img width="40%" src="/home/ubuntu/OpenMMLabCamp/detection/ionogram_detection/20191216074500.png"/>
+<img width="40%" src="./figures/20191216074500.png"/>
 
 7. 修改Anchor尺寸
 
@@ -211,7 +209,7 @@ python tools/test.py ./configs/custom_dataset/yolov6_l_syncbn_fast_1xb32-100e_io
 
 对比loss下降的过程可以发现，使用预训练权重时，loss下降得更快。可见即使是自然图像数据集上预训练的模型，在雷达图像数据集上微调，也可以加快收敛。
 
-![loss](/detection/ionogram_detection/loss.png)
+<img src="./figures/loss.png">
 
 ## 自定义数据集config修改经验
 
