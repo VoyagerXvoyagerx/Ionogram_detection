@@ -121,11 +121,10 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5_m-v6
 | Albu   |                 |                  |                  | √                |
 | HSV    |                 |                  |                  | √                |
 | Flip   |                 |                  |                  | √                |
-| 可视化 |  # 2019111215300 | # 20191105223000 | # 20191216074500 | # 20191103063000 |
+| 可视化 | <img width="40%" src="./figures/20191112153000_aug0_resize_pad.png"/> | <img width="20%" src="./figures/20191105223000_mosaic.png"/> |<img width="40%" src="./figures/20191216074500_mosaic_affine.png"/>
+| <img width="40%" src="./figures/20191216074500_aug.png"/> |
 
-<img width="40%" src="./figures/20191216074500.png"/>
-
-7. 修改Anchor尺寸
+1. 修改Anchor尺寸
 
 ```shell
 python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py \
