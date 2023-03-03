@@ -121,8 +121,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5_m-v6
 | Albu   |                 |                  |                  | √                |
 | HSV    |                 |                  |                  | √                |
 | Flip   |                 |                  |                  | √                |
-| 可视化 | <img width="40%" src="./figures/20191112153000_aug0_resize_pad.png"/> | <img width="20%" src="./figures/20191105223000_mosaic.png"/> |<img width="40%" src="./figures/20191216074500_mosaic_affine.png"/>
-| <img width="40%" src="./figures/20191216074500_aug.png"/> |
+| 可视化 | <img src="./figures/20191112153000_aug0_resize_pad.png"/> | <img width="50%" src="./figures/20191105223000_mosaic.png"/> |<img src="./figures/20191216074500_mosaic_affine.png"/>| <img  src="./figures/20191216074500_aug.png"/> |
 
 1. 修改Anchor尺寸
 
