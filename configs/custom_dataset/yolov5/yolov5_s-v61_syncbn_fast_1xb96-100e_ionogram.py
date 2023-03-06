@@ -1,50 +1,57 @@
 _base_ = '../../yolov5/yolov5_s-v61_syncbn_fast_8xb16-300e_coco.py'
 
-max_epochs = 100
+# ========================modified parameters======================
+# -----data related-----
 data_root = './Iono4311/'
 work_dir = './work_dirs/yolov5_s_100e'
-load_from = './work_dirs/yolov5_s-v61_syncbn_fast_8xb16-300e_coco_20220918_084700-86e02187.pth'  # noqa
-
-# dataloader, base_lr, YOLOv5-s 8 x 16bs by default
+train_ann_file = 'annotations/train.json'
+train_data_prefix = 'train_images/'
+val_ann_file = 'annotations/val.json'
+val_data_prefix = 'val_images/'
+test_ann_file = 'annotations/test.json'
+test_data_prefix = 'test_images/'
+class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
+num_classes = len(class_name)
+metainfo = dict(
+    classes = class_name,
+    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34),
+               (0, 11, 123), (130, 20, 12), (120, 121, 80)]
+)
+# Batch size of a single GPU during training
 train_batch_size_per_gpu = 96
+# Worker to pre-fetch data for each single GPU during training
 train_num_workers = 8
-# train_batch_size_per_gpu = 64 # for amp = False
 
-# default_hooks
-save_epoch_intervals = 10
-val_interval = 2
-logger_interval = 20
-max_keep_ckpts = 1
-
-# base_lr_default * (your_bs 32 / default_bs (8x16))    100/(8*16)
-base_lr = _base_.base_lr * train_batch_size_per_gpu / (8 * 16)
-checkpoint_interval = 10
-
-# Optimized anchor
+# -----model related-----
+# Basic size of multi-scale prior box
 anchors = [
     [[8, 6], [24, 4], [19, 9]],
     [[22, 19], [17, 49], [29, 45]],
     [[44, 66], [96, 76], [126, 59]]
 ]
 
-class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
-num_classes = len(class_name)
+# -----train val related-----
+# base_lr_default * (your_bs / default_bs (8x16)) for SGD
+base_lr = _base_.base_lr * train_batch_size_per_gpu / (8 * 16)
+max_epochs = 100
+load_from = 'https://download.openmmlab.com/mmyolo/v0/yolov5/yolov5_s-v61_syncbn_fast_8xb16-300e_coco/yolov5_s-v61_syncbn_fast_8xb16-300e_coco_20220918_084700-86e02187.pth'  # noqa
 
-# dataloader
-metainfo = dict(
-    classes = class_name,
-    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34),
-               (0, 11, 123), (130, 20, 12), (120, 121, 80)]
-)
+# default_hooks
+save_epoch_intervals = 10
+logger_interval = 20
+max_keep_ckpts = 1
 
-train_cfg = dict(
-    max_epochs=max_epochs,
-    val_begin=20,  
-    val_interval=val_interval
-)
+# train_cfg
+val_interval = 2
+val_begin = 20
 
 tta_model = None
 
+visualizer = dict(
+    vis_backends=[dict(type='LocalVisBackend'),
+                  dict(type='WandbVisBackend'), dict(type='TensorboardVisBackend')])
+
+# =======================Unmodified in most cases==================
 model = dict(
     bbox_head=dict(
         head_module=dict(num_classes=num_classes),
@@ -61,10 +68,11 @@ train_dataloader = dict(
         times=1,
         dataset=dict(
             type=_base_.dataset_type,
+            indices=200,  # 设置 indices=200，表示每个 epoch 只迭代 200 个样本
             data_root=data_root,
             metainfo=metainfo,
-            ann_file='annotations/train.json',
-            data_prefix=dict(img='train_images/'),
+            ann_file=train_ann_file,
+            data_prefix=dict(img=train_data_prefix),
             filter_cfg=dict(filter_empty_gt=False, min_size=32),
             pipeline=_base_.train_pipeline)))
 
@@ -74,8 +82,8 @@ val_dataloader = dict(
     dataset=dict(
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='annotations/val.json',
-        data_prefix=dict(img='val_images/')))
+        ann_file=val_ann_file,
+        data_prefix=dict(img=val_data_prefix)))
 
 test_dataloader = dict(
     batch_size=train_batch_size_per_gpu,
@@ -83,11 +91,8 @@ test_dataloader = dict(
     dataset=dict(
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='annotations/test.json',
-        data_prefix=dict(img='test_images/')))
-
-val_evaluator = dict(ann_file=data_root + 'annotations/val.json')
-test_evaluator = dict(ann_file=data_root + 'annotations/test.json')
+        ann_file=test_ann_file,
+        data_prefix=dict(img=test_data_prefix)))
 
 optim_wrapper = dict(optimizer=dict(lr=base_lr))
 
@@ -101,6 +106,11 @@ default_hooks = dict(
     param_scheduler=dict(max_epochs=max_epochs),
     logger=dict(type='LoggerHook', interval=logger_interval))
 
-visualizer = dict(
-    vis_backends=[dict(type='LocalVisBackend'),
-                  dict(type='WandbVisBackend'), dict(type='TensorboardVisBackend')])
+val_evaluator = dict(ann_file=data_root + val_ann_file)
+test_evaluator = dict(ann_file=data_root + test_ann_file)
+
+train_cfg = dict(
+    max_epochs=max_epochs,
+    val_begin=val_begin,  
+    val_interval=val_interval
+)
