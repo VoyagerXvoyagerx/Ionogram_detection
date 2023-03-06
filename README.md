@@ -82,7 +82,7 @@ test 646 images
 
 1. 配置文件
 
-配置文件在目录[/config/custom_dataset](/detection/ionogram_detection/config/custom_dataset)下。
+配置文件在目录[/configs/custom_dataset](/detection/ionogram_detection/config/custom_dataset)下。
 
 2. 数据集可视化分析
 
@@ -100,7 +100,7 @@ E、Es-l、Esc、F1 类别以小目标居多，F2、Fspread 类主要是中等�
 以 YOLOv5-s 为例：
 
 ```bash
-python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py \
+python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
 --out-dir output --show-interval 1
 ```
 
@@ -128,7 +128,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5_s-v6
 使用分析工具中的 `optimize_anchors.py` 脚本得到适用于本数据集的先验锚框尺寸。
 
 ```bash
-python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py \
+python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
                                                 --algorithm v5-k-means \
                                                 --input-shape 640 640 \
                                                 --prior-match-thr 4.0 \
@@ -140,7 +140,7 @@ python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5_s-
 根据配置文件，使用分析工具中的 `get_flops.py` 脚本可以得到模型的参数量、浮点计算量等信息。以 YOLOv5-s 为例：
 
 ```bash
-python tools/analysis_tools/get_flops.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py
+python tools/analysis_tools/get_flops.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
 得到的输出如下，表示模型的浮点运算量为 7.947G，一共有 7.036M 个可学习参数。
@@ -158,17 +158,13 @@ Model Parameters: 7.036M
 1. 训练
 
 ```bash
-python tools/train.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py
+python tools/train.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
 2. 测试
 
 ```bash
-python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py \
-./work_dirs/yolov6_l_100e/best_coco/bbox_mAP_epoch_76.pth \
---work-dir ./work_dirs/yolov6_l_100e \
---show-dir ./output \
---wait-time 1
+python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py work_dirs/yolov5_s_100e/best_coco-test-0.584.pth
 ```
 
 ## 实验与结果分析
