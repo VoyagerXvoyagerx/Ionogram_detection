@@ -241,18 +241,18 @@ python tools/test.py ./configs/custom_dataset/yolov6_l_syncbn_fast_1xb32-100e_io
 
 ### 频高图检测 benchmark
 
-| Model | epoch(best) | FLOPs(G) | Params(M) | pretrain | val mAP | test mAP | config |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| YOLOv5-s | 100(75) | 7.95 | 7.04 | Coco | 0.577  | 0.584 | yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram |
-| YOLOv5-m | 100(70) | 24.05 | 20.89 | Coco | 0.587  | 0.586 | yolov5_m-v61_syncbn_fast_1xb32-100e_ionogram |
-| YOLOv6-s | 100(54) | 24.2 | 18.84 | Coco | 0.584 | 0.594 | yolov6_s_syncbn_fast_1xb32-100e_ionogram |
-| YOLOv6-m | 100(76) | 37.08 | 44.42 | Coco | 0.590 | 0.590 | yolov6_m_syncbn_fast_1xb32-100e_ionogram |
-| YOLOv6-l | 100(76) | 71.33 | 58.47 | Coco | 0.605 | 0.597 | yolov6_l_syncbn_fast_1xb32-100e_ionogram |
-| YOLOv7-tiny | 100(78) | 6.57 | 6.02 | Coco | 0.549 | 0.568 | yolov7_tiny_syncbn_fast_1xb32-100e_ionogram |
-| YOLOv7-x | 100(58) | 94.27 | 70.85 | Coco | 0.602 | 0.595 | yolov7_x_syncbn_fast_1xb32-100e_ionogram |
-| rtmdet-s | 100(64) | 14.76 | 8.86 | Coco | 0.581 | 0.571 | rtmdet_s_syncbn_fast_1xb32-100e_ionogram |
+| Model       | epoch(best) | FLOPs(G) | Params(M) | pretrain | val mAP | test mAP | Config                                                           | Log                                           |
+|-------------|-------------|----------|-----------|----------|---------|----------|------------------------------------------------------------------|-----------------------------------------------|
+| YOLOv5-s    | 100(82)     | 7.95     | 7.04      | Coco     | 0.575   | 0.584    | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) | [log](./logs/yolov5_s_20230105_213510.json)    |
+| YOLOv5-m    | 100(70)     | 24.05    | 20.89     | Coco     | 0.587   | 0.586    | [config](./configs/custom_dataset/yolov5/yolov5_m-v61_syncbn_fast_1xb32-100e_ionogram.py)    | [log](./logs/yolov5_m_20230106_004642.json)    |
+| YOLOv6-s    | 100(54)     | 24.2     | 18.84     | Coco     | 0.584   | 0.594    | [config](./configs/custom_dataset/yolov6/yolov6_s_syncbn_fast_1xb32-100e_ionogram.py)        | [log](./logs/yolov6_s_20230107_003207.json)    |
+| YOLOv6-m    | 100(76)     | 37.08    | 44.42     | Coco     | 0.590   | 0.590    | [config](./configs/custom_dataset/yolov6/yolov6_m_syncbn_fast_1xb32-100e_ionogram.py)        | [log](./logs/yolov6_m_20230107_201029.json)    |
+| YOLOv6-l    | 100(76)     | 71.33    | 58.47     | Coco     | 0.605   | 0.597    | [config](./configs/custom_dataset/yolov6/yolov6_l_syncbn_fast_1xb32-100e_ionogram.py)        | [log](./logs/yolov6_l_20230108_005634.json)    |
+| YOLOv7-tiny | 100(78)     | 6.57     | 6.02      | Coco     | 0.549   | 0.568    | [config](./configs/custom_dataset/yolov7/yolov7_tiny_syncbn_fast_1xb16-100e_ionogram.py)     | [log](./logs/yolov7_tiny_20230215_202837.json) |
+| YOLOv7-x    | 100(58)     | 94.27    | 70.85     | Coco     | 0.602   | 0.595    | [config](./configs/custom_dataset/yolov7/yolov7_x_syncbn_fast_1xb16-100e_ionogram.py)        | [log](./logs/yolov7_x_20230110_165832.json)    |
+| rtmdet-s    | 100(64)     | 14.76    | 8.86      | Coco     | 0.581   | 0.571    | [config](./configs/custom_dataset/rtmdet/rtmdet_s_syncbn_fast_1xb8-100e_ionogram.py)         | [log](./logs/rtmdet_s_20230215_211817.json)    |
 
-## 自定义数据集config修改经验
+## 自定义数据集 config 修改经验
 
 ### 必须修改的项目
 
@@ -296,3 +296,7 @@ python tools/test.py ./configs/custom_dataset/yolov6_l_syncbn_fast_1xb32-100e_io
     - metainfo
     - root
   - val_evaluator, test_evaluator
+
+## To Do
+
+Beautify configs.

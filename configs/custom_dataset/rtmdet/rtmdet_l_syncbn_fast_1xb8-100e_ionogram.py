@@ -1,10 +1,10 @@
-_base_ = '../_base_/default_runtime.py'
+_base_ = '../../_base_/default_runtime.py'
 
 # visualizer
 visualizer = dict(vis_backends=[dict(type='LocalVisBackend'), dict(type='WandbVisBackend')])
 
 # work_dir and pre-train
-load_from = './work_dirs/rtmdet_l_syncbn_fast_8xb32-300e_coco_20230102_135928-ee3abdc4.pth'
+load_from = './work_dirs/rtmdet_l_syncbn_fast_8xb32-300e_coco_20230102_135928-ee3abdc4.pth' # noqa
 work_dir = './work_dirs/rtmdet_l_100e'
 
 data_root = './Iono4311/'
@@ -12,7 +12,8 @@ class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
 num_classes = len(class_name)
 metainfo = dict(
     classes = class_name,
-    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34), (0, 11, 123), (130, 20, 12), (120, 121, 80)])
+    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34),
+               (0, 11, 123), (130, 20, 12), (120, 121, 80)])
 img_scale = (640, 640)
 dataset_type = 'YOLOv5CocoDataset'
 

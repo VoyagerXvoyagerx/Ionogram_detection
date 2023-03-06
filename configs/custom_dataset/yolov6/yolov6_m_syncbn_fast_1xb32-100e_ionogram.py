@@ -1,24 +1,16 @@
-_base_ = '../yolov6/yolov6_s_syncbn_fast_8xb32-400e_coco.py'
-'''
-预训练模型: base, load_from, 和num_class有关的参数
-必须修改: work_dirs, visualizer
-epoch: max_epochs, val_begin
-dataset: dataloader, evaluator, metainfo, image_scale
-trick: flip
-'''
+_base_ = '../../yolov6/yolov6_s_syncbn_fast_8xb32-400e_coco.py'
+
 deepen_factor = 0.6
 widen_factor = 0.75
 affine_scale = 0.9
-max_epochs = 100  # 训练的最大 epoch
-data_root = './Iono4311/'  # 数据集目录的绝对路径
-
+max_epochs = 100
+data_root = './Iono4311/'
 
 work_dir = './work_dirs/yolov6_m_100e'
 load_from = './work_dirs/yolov6_m_syncbn_fast_8xb32-300e_coco_20221109_182658-85bda3f4.pth'  # noqa
 
-# 根据自己的 GPU 情况，修改 batch size，YOLOv6-s 默认为 8卡 x 32bs
 train_batch_size_per_gpu = 32
-train_num_workers = 4  # 推荐使用 train_num_workers = nGPU x 4
+train_num_workers = 4
 
 save_epoch_intervals = 2  
 
@@ -29,7 +21,8 @@ class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
 num_classes = len(class_name)
 metainfo = dict(
     classes = class_name,
-    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34), (0, 11, 123), (130, 20, 12), (120, 121, 80)]  # 画图时候的颜色，随便设置即可
+    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34),
+               (0, 11, 123), (130, 20, 12), (120, 121, 80)]
 )
 image_scale = (400, 360)
 

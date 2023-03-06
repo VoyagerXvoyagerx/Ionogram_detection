@@ -1,12 +1,5 @@
 _base_ = './yolov6_m_syncbn_fast_1xb32-100e_ionogram.py'
-'''
-预训练模型: base, load_from
-必须修改: work_dirs, visualizer
-image_scale??
-epoch: max_epochs, val_begin, loss,
-test_dataloader, test_evaluator
-trick: flip
-'''
+
 deepen_factor = 1
 widen_factor = 1
 work_dir = './work_dirs/yolov6_l_100e'

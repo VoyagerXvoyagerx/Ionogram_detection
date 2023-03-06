@@ -1,12 +1,5 @@
-_base_ = '../yolov6/yolov6_s_syncbn_fast_8xb32-400e_coco.py'
-'''
-预训练模型: base, load_from
-必须修改: work_dirs, visualizer
-image_scale??
-epoch: max_epochs, val_begin, loss,
-test_dataloader, test_evaluator
-trick: flip
-'''
+_base_ = '../../yolov6/yolov6_s_syncbn_fast_8xb32-400e_coco.py'
+
 max_epochs = 100  # 训练的最大 epoch
 data_root = './Iono4311/'  # 数据集目录的绝对路径
 

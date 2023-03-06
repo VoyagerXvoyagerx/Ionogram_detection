@@ -1,36 +1,4 @@
-_base_ = '../_base_/default_runtime.py'
-
-'''
-Must modify: _base_, load_from, work_dir, num_classes related(loss_cls)
-_base_ = Coco Config: 
-- visualizer
-- dataset settings
-    - data_root
-    - class_name
-    - num_classes
-    - metainfo
-    - img_scale
-- train, val, test
-    - train_cfg
-        - max_epochs, save_epoch_intervals, val_begin
-    - max_keep_ckpts
-    - lr
-    - train, val, test_dataloader
-        - data_prefix, ann_file, metainfo
-    - test_evaluator
-'''
-'''
-data_root = './Iono4311/'
-class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
-num_classes = len(class_name)
-metainfo = dict(
-    classes = class_name,
-    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34), (0, 11, 123), (130, 20, 12), (120, 121, 80)])
-img_scale = (400, 360)
-
-# visualizer
-visualizer = dict(vis_backends=[dict(type='LocalVisBackend'), dict(type='WandbVisBackend')])
-'''
+_base_ = '../../_base_/default_runtime.py'
 
 # dataset settings
 data_root = './Iono4311/'
@@ -39,7 +7,8 @@ class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
 num_classes = len(class_name)
 metainfo = dict(
     classes = class_name,
-    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34), (0, 11, 123), (130, 20, 12), (120, 121, 80)]  # 画图时候的颜色，随便设置即可
+    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34),
+               (0, 11, 123), (130, 20, 12), (120, 121, 80)]
 )
 img_scale = (640, 640)
 
@@ -47,15 +16,12 @@ img_scale = (640, 640)
 visualizer = dict(vis_backends=[dict(type='LocalVisBackend'), dict(type='WandbVisBackend')])
 
 # work_dir and pre-train
-load_from = './work_dirs/yolov7_l_syncbn_fast_8x16b-300e_coco_20221123_023601-8113c0eb.pth'
+load_from = './work_dirs/yolov7_l_syncbn_fast_8x16b-300e_coco_20221123_023601-8113c0eb.pth'  # noqa
 work_dir = './work_dirs/yolov7_l_100e'
 
 # parameters that often need to be modified
 save_epoch_intervals = 2
-# train_batch_size_per_gpu = 16
-# train_num_workers = 8
 
-# 根据自己的 GPU 情况，修改 batch size，YOLOv6-s 默认为 8卡 x 16bs
 train_batch_size_per_gpu = 16
 train_num_workers = 4  # 推荐使用 train_num_workers = nGPU x 4
 max_epochs = 100
@@ -75,7 +41,10 @@ batch_shapes_cfg = dict(
     size_divisor=32,
     extra_pad_ratio=0.5)
 
-anchors = [[[14, 14], [35, 6], [32, 18]], [[32, 45], [28, 97], [52, 80]], [[71, 122], [185, 94], [164, 134]]]
+anchors = [
+    [[14, 14], [35, 6], [32, 18]],
+    [[32, 45], [28, 97], [52, 80]],
+    [[71, 122], [185, 94], [164, 134]]]
 
 strides = [8, 16, 32]
 num_det_layers = 3
@@ -212,21 +181,6 @@ train_pipeline = [
                    'flip_direction'))
 ]
 
-# train_dataloader = dict(
-#     batch_size=train_batch_size_per_gpu,
-#     num_workers=train_num_workers,
-#     persistent_workers=persistent_workers,
-#     pin_memory=True,
-#     sampler=dict(type='DefaultSampler', shuffle=True),
-#     collate_fn=dict(type='yolov5_collate'),  # FASTER
-#     dataset=dict(
-#         type=dataset_type,
-#         data_root=data_root,
-#         ann_file='annotations/train.json',
-#         data_prefix=dict(img='train_images/'),
-#         filter_cfg=dict(filter_empty_gt=False, min_size=32),
-#         pipeline=train_pipeline))
-            
 train_dataloader = dict(
     batch_size=train_batch_size_per_gpu,
     num_workers=train_num_workers,
@@ -235,17 +189,13 @@ train_dataloader = dict(
     sampler=dict(type='DefaultSampler', shuffle=True),
     collate_fn=dict(type='yolov5_collate'),  # FASTER
     dataset=dict(
-        type='RepeatDataset',
-        # 数据量太少的话，可以使用 RepeatDataset ，在每个 epoch 内重复当前数据集 n 次，这里设置 5 是重复 5 次
-        times=1,
-        dataset=dict(
-            type=dataset_type,
-            data_root=data_root,
-            metainfo=metainfo,
-            ann_file='annotations/train.json',
-            data_prefix=dict(img='train_images/'),
-            filter_cfg=dict(filter_empty_gt=False, min_size=32),
-            pipeline=train_pipeline)))
+        type=dataset_type,
+        data_root=data_root,
+        metainfo=metainfo,
+        ann_file='annotations/train.json',
+        data_prefix=dict(img='train_images/'),
+        filter_cfg=dict(filter_empty_gt=False, min_size=32),
+        pipeline=train_pipeline))
 
 test_pipeline = [
     dict(type='LoadImageFromFile', file_client_args=_base_.file_client_args),
@@ -351,5 +301,3 @@ custom_hooks = [
 
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
-
-# randomness = dict(seed=1, deterministic=True)
