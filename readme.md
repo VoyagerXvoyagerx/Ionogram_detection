@@ -196,7 +196,7 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb3
 | YOLOv5-s | 200(148)    | True  | 96        | 6           | 54.66%           | 72 min         | 0.575   |
 | YOLOv5-s | 200(188)    | True  | 96        | **8**       | 54.66%           | 67 min         | 0.576   |
 
-不同 batch size 的训练过程中，数据加载时间占每步总时长的比例
+不同 batch size 的训练过程中，数据加载时间 `data_time` 占每步总时长的比例
 
 <img width="50%" src="./figures/data_time.png">
 
