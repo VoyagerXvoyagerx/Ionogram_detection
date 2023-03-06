@@ -143,7 +143,7 @@ python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5_s-
 python tools/analysis_tools/get_flops.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py
 ```
 
-得到输出
+得到的输出如下，表示模型的浮点运算量为 7.947G，一共有参数 7.036M 个。
 
 ```bash
 ==============================
