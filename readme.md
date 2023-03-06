@@ -82,7 +82,7 @@ test 646 images
 
 1. 配置文件
 
-配置文件在目录[/config/custom_dataset](/detection/ionogram_detection/config/custom_dataset)下
+配置文件在目录[/config/custom_dataset](/detection/ionogram_detection/config/custom_dataset)下。
 
 2. 数据集可视化分析
 
@@ -112,7 +112,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5_s-v6
 - HSV随机增强图像
 - 随机水平翻转
 
-修改 `train_pipeline`，可以得到不同数据增强方法的可视化的可视化展示：
+修改 `train_pipeline` 并可视化不同的数据增强方法：
 
 |Aug Method    |||||
 |--------|-----------------|------------------|------------------|------------------|
@@ -143,7 +143,7 @@ python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5_s-
 python tools/analysis_tools/get_flops.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py
 ```
 
-得到的输出如下，表示模型的浮点运算量为 7.947G，一共有参数 7.036M 个。
+得到的输出如下，表示模型的浮点运算量为 7.947G，一共有 7.036M 个可学习参数。
 
 ```bash
 ==============================
@@ -158,13 +158,13 @@ Model Parameters: 7.036M
 1. 训练
 
 ```bash
-python tools/train.py configs/custom_dataset/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram_pre0.py
+python tools/train.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py
 ```
 
 2. 测试
 
 ```bash
-python tools/test.py ./configs/custom_dataset/yolov6_l_syncbn_fast_1xb32-100e_ionogram.py \
+python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram.py \
 ./work_dirs/yolov6_l_100e/best_coco/bbox_mAP_epoch_76.pth \
 --work-dir ./work_dirs/yolov6_l_100e \
 --show-dir ./output \
@@ -254,23 +254,10 @@ python tools/test.py ./configs/custom_dataset/yolov6_l_syncbn_fast_1xb32-100e_io
 
 ## 自定义数据集 config 修改经验
 
-### 必须修改的项目
+### 必须要修改的项目
 
 - \_base\_
 - work_dir
-
-### 模型尺寸不变，修改策略时
-
-继承自修改过的config
-根据实验需要修改config内容
-
-### 修改模型尺寸时
-
-继承自修改过的config
-
-- num_classes related (e.g. loss_cls)
-- load_from
-- 官方config中的内容
 
 ### 使用新的模型训练自定义数据集
 
@@ -296,6 +283,19 @@ python tools/test.py ./configs/custom_dataset/yolov6_l_syncbn_fast_1xb32-100e_io
     - metainfo
     - root
   - val_evaluator, test_evaluator
+
+### 只修改模型尺寸时
+
+继承自修改过的config
+
+- num_classes related (e.g. loss_cls)
+- load_from
+- 官方config中的内容
+
+### 模型尺寸不变，只修改训练策略时
+
+继承自修改过的config
+根据实验需要修改config内容
 
 ## To Do
 
