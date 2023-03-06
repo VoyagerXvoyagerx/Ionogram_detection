@@ -114,7 +114,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5_s-v6
 
 修改 `train_pipeline` 并可视化不同的数据增强方法：
 
-|Aug Method    |||||
+|Aug Method|[config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_aug0.py) |[config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram_mosaic.py) | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine.py) | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) |
 |--------|-----------------|------------------|------------------|------------------|
 | Mosaic |                 | √                | √                | √                |
 | Affine |                 |                  | √                | √                |
@@ -211,7 +211,7 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb3
 
 #### 不同数据增强方法
 
-| Aug Method |       |       |       |       |       |
+| Aug Method |   [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_aug0.py)    |    [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram_mosaic.py)   |  [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine.py)   | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine_albu_hsv.py)      | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py)      |
 |------------|-------|-------|-------|-------|-------|
 | Mosaic     |       | √     | √     | √     | √     |
 | Affine     |       |       | √     | √     | √     |
@@ -226,12 +226,12 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb3
 
 在配置文件中，修改 `load_from = None` 即可不使用预训练权重。对不使用预训练权重的实验，将基础学习率增大四倍，训练轮数增加至 200 轮，保证模型得到充分的训练。
 
-| Model    | Epoch(best) | FLOPs(G) | Params(M) | Pretrain | Val mAP |
-|----------|-------------|----------|-----------|----------|---------|
-| YOLOv5-s | 100(82)     | 7.95     | 7.04      | Coco     | 0.575   |
-| YOLOv5-s | 200(145)    | 7.95     | 7.04      | None     | 0.565   |
-| YOLOv6-s | 100(54)     | 24.2     | 18.84     | Coco     | 0.584   |
-| YOLOv6-s | 200(188)    | 24.2     | 18.84     | None     | 0.557   |
+| Model    | Epoch(best) | FLOPs(G) | Params(M) | Pretrain | Val mAP | Config  |
+|----------|-------------|----------|-----------|----------|---------|---------|
+| YOLOv5-s | 100(82)     | 7.95     | 7.04      | Coco     | 0.575   | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) |
+| YOLOv5-s | 200(145)    | 7.95     | 7.04      | None     | 0.565   | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-200e_ionogram_pre0.py) |
+| YOLOv6-s | 100(54)     | 24.2     | 18.84     | Coco     | 0.584   | [config](./configs/custom_dataset/yolov6/yolov6_s_syncbn_fast_1xb32-100e_ionogram.py) |
+| YOLOv6-s | 200(188)    | 24.2     | 18.84     | None     | 0.557   | [config](./configs/custom_dataset/yolov6/yolov6_s_syncbn_fast_1xb32-200e_ionogram_pre0.py) |
 
 训练过程中的损失下降对比图
 
@@ -299,4 +299,5 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb3
 
 ## To Do
 
-Beautify configs.
+- 根据 mmyolo 0.6.0 的样式美化配置文件。
+- 测试数据集中不同类别的精度。
