@@ -68,7 +68,6 @@ train_dataloader = dict(
         times=1,
         dataset=dict(
             type=_base_.dataset_type,
-            indices=200,  # 设置 indices=200，表示每个 epoch 只迭代 200 个样本
             data_root=data_root,
             metainfo=metainfo,
             ann_file=train_ann_file,
