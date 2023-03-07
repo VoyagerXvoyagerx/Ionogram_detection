@@ -46,6 +46,7 @@ val_interval = 2
 val_begin = 20
 
 tta_model = None
+tta_pipeline = None
 
 visualizer = dict(
     vis_backends=[dict(type='LocalVisBackend'),

@@ -1,6 +1,6 @@
 _base_ = './yolov6_s_syncbn_fast_1xb32-100e_ionogram.py'
 
-# ======================= Possible modified parameters =======================
+# ======================= Modified parameters =======================
 # -----data related-----
 work_dir = './work_dirs/yolov6_m_100e'
 

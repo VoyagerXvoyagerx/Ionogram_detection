@@ -2,8 +2,16 @@ _base_ = '../../yolov6/yolov6_s_syncbn_fast_8xb32-400e_coco.py'
 
 # ========================modified parameters======================
 # -----data related-----
-data_root = './Iono4311/'
 work_dir = './work_dirs/yolov6_s_100e'
+
+data_root = './Iono4311/'
+train_ann_file = 'annotations/train.json'
+train_data_prefix = 'train_images/'
+val_ann_file = 'annotations/val.json'
+val_data_prefix = 'val_images/'
+test_ann_file = 'annotations/test.json'
+test_data_prefix = 'test_images/'
+
 class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
 num_classes = len(class_name)
 metainfo = dict(
@@ -14,6 +22,9 @@ metainfo = dict(
 
 train_batch_size_per_gpu = 32
 train_num_workers = 8
+
+tta_model = None
+tta_pipeline = None
 
 # -----train val related-----
 load_from = 'https://download.openmmlab.com/mmyolo/v0/yolov6/yolov6_s_syncbn_fast_8xb32-400e_coco/yolov6_s_syncbn_fast_8xb32-400e_coco_20221102_203035-932e1d91.pth'  # noqa
@@ -55,8 +66,8 @@ train_dataloader = dict(
             type=_base_.dataset_type,
             data_root=data_root,
             metainfo=metainfo,
-            ann_file='annotations/train.json',
-            data_prefix=dict(img='train_images/'),
+            ann_file=train_ann_file,
+            data_prefix=dict(img=train_data_prefix),
             filter_cfg=dict(filter_empty_gt=False, min_size=32),
             pipeline=_base_.train_pipeline)))
 
@@ -64,18 +75,18 @@ val_dataloader = dict(
     dataset=dict(
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='annotations/val.json',
-        data_prefix=dict(img='val_images/')))
+        ann_file=val_ann_file,
+        data_prefix=dict(img=val_data_prefix)))
 
 test_dataloader = dict(
     dataset=dict(
         metainfo=metainfo,
         data_root=data_root,
-        ann_file='annotations/test.json',
-        data_prefix=dict(img='test_images/')))
+        ann_file=test_ann_file,
+        data_prefix=dict(img=test_data_prefix)))
 
-val_evaluator = dict(ann_file=data_root + 'annotations/val.json')
-test_evaluator = dict(ann_file=data_root + 'annotations/test.json')
+val_evaluator = dict(ann_file=data_root + val_data_prefix)
+test_evaluator = dict(ann_file=data_root + test_data_prefix)
 
 optim_wrapper = dict(optimizer=dict(lr=base_lr))
 
