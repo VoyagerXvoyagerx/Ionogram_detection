@@ -1,88 +1,97 @@
-_base_ = '../yolov5/yolov5_m-v61_syncbn_fast_8xb16-300e_coco.py'
+_base_ = './yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py'
 
-max_epochs = 100
-data_root = './Iono4311/'
+# ========================modified parameters======================
+# Copied from '../../yolov5/yolov5_m-v61_syncbn_fast_8xb16-300e_coco.py'
+deepen_factor = 0.67
+widen_factor = 0.75
+lr_factor = 0.1
+affine_scale = 0.9
+loss_cls_weight = 0.3
+loss_obj_weight = 0.7
+mixup_prob = 0.1
+
+# -----data related-----
 work_dir = './work_dirs/yolov5_m_100e'
-load_from = './work_dirs/yolov5_m-v61_syncbn_fast_8xb16-300e_coco_20220917_204944-516a710f.pth'  # noqa
-
 train_batch_size_per_gpu = 32
-train_num_workers = 4
 
-save_epoch_intervals = 2
+# -----train val related-----
+# Scale lr for SGD
+base_lr = _base_.base_lr * train_batch_size_per_gpu / _base_.train_batch_size_per_gpu
+load_from = 'https://download.openmmlab.com/mmyolo/v0/yolov5/yolov5_m-v61_syncbn_fast_8xb16-300e_coco/yolov5_m-v61_syncbn_fast_8xb16-300e_coco_20220917_204944-516a710f.pth'  # noqa
 
-base_lr = _base_.base_lr / 4
-
-# Optimized anchor
-anchors = [
-    [[8, 6], [24, 4], [19, 9]],
-    [[22, 19], [17, 49], [29, 45]],
-    [[44, 66], [96, 76], [126, 59]]
-]
-
-class_name = ('E', 'Es-l', 'Es-c', 'F1', 'F2', 'Spread-F')
-num_classes = len(class_name)
-
-metainfo = dict(
-    classes = class_name,
-    palette = [(250, 165, 30), (120, 69, 125), (53, 125, 34), (0, 11, 123), (130, 20, 12), (120, 121, 80)]
-)
-
-train_cfg = dict(
-    max_epochs=max_epochs,
-    val_begin=20,
-    val_interval=save_epoch_intervals
-)
+# =======================Unmodified in most cases==================
+num_classes = _base_.num_classes
+num_det_layers = _base_.num_det_layers
+img_scale = _base_.img_scale
 
 model = dict(
+    backbone=dict(
+        deepen_factor=deepen_factor,
+        widen_factor=widen_factor,
+    ),
+    neck=dict(
+        deepen_factor=deepen_factor,
+        widen_factor=widen_factor,
+    ),
     bbox_head=dict(
-        head_module=dict(num_classes=num_classes),
-        prior_generator=dict(base_sizes=anchors),
+        head_module=dict(widen_factor=widen_factor),
+        loss_cls=dict(loss_weight=loss_cls_weight *
+                      (num_classes / 80 * 3 / num_det_layers)),
+        loss_obj=dict(loss_weight=loss_obj_weight *
+                      ((img_scale[0] / 640)**2 * 3 / num_det_layers))))
 
-        loss_cls=dict(loss_weight=0.3 *
-                      (num_classes / 80 * 3 / _base_.num_det_layers))))
+pre_transform = _base_.pre_transform
+albu_train_transforms = _base_.albu_train_transforms
+
+mosaic_affine_pipeline = [
+    dict(
+        type='Mosaic',
+        img_scale=img_scale,
+        pad_val=114.0,
+        pre_transform=pre_transform),
+    dict(
+        type='YOLOv5RandomAffine',
+        max_rotate_degree=0.0,
+        max_shear_degree=0.0,
+        scaling_ratio_range=(1 - affine_scale, 1 + affine_scale),
+        # img_scale is (width, height)
+        border=(-img_scale[0] // 2, -img_scale[1] // 2),
+        border_val=(114, 114, 114))
+]
+
+# enable mixup
+train_pipeline = [
+    *pre_transform, *mosaic_affine_pipeline,
+    dict(
+        type='YOLOv5MixUp',
+        prob=mixup_prob,
+        pre_transform=[*pre_transform, *mosaic_affine_pipeline]),
+    dict(
+        type='mmdet.Albu',
+        transforms=albu_train_transforms,
+        bbox_params=dict(
+            type='BboxParams',
+            format='pascal_voc',
+            label_fields=['gt_bboxes_labels', 'gt_ignore_flags']),
+        keymap={
+            'img': 'image',
+            'gt_bboxes': 'bboxes'
+        }),
+    dict(type='YOLOv5HSVRandomAug'),
+    dict(type='mmdet.RandomFlip', prob=0.5),
+    dict(
+        type='mmdet.PackDetInputs',
+        meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape', 'flip',
+                   'flip_direction'))
+]
 
 train_dataloader = dict(
     batch_size=train_batch_size_per_gpu,
-    num_workers=train_num_workers,
     dataset=dict(
-        _delete_=True,
-        type='RepeatDataset',
-        times=1,
         dataset=dict(
-            type=_base_.dataset_type,
-            data_root=data_root,
-            metainfo=metainfo,
-            ann_file='annotations/train.json',
-            data_prefix=dict(img='train_images/'),
-            filter_cfg=dict(filter_empty_gt=False, min_size=32),
-            pipeline=_base_.train_pipeline)))
+            pipeline=train_pipeline)))
 
-val_dataloader = dict(
-    dataset=dict(
-        metainfo=metainfo,
-        data_root=data_root,
-        ann_file='annotations/val.json',
-        data_prefix=dict(img='val_images/')))
-
-test_dataloader = dict(
-    dataset=dict(
-        metainfo=metainfo,
-        data_root=data_root,
-        ann_file='annotations/test.json',
-        data_prefix=dict(img='test_images/')))
-
-val_evaluator = dict(ann_file=data_root + 'annotations/val.json')
-test_evaluator = dict(ann_file=data_root + 'annotations/test.json')
-
+val_dataloader = dict(batch_size=train_batch_size_per_gpu)
+test_dataloader = dict(batch_size=train_batch_size_per_gpu)
 optim_wrapper = dict(optimizer=dict(lr=base_lr))
-
-default_hooks = dict(
-    checkpoint=dict(
-        type='CheckpointHook',
-        interval=save_epoch_intervals,
-        max_keep_ckpts=1,
-        save_best='auto'),
-    param_scheduler=dict(max_epochs=max_epochs),
-    logger=dict(type='LoggerHook', interval=50))
-
-visualizer = dict(vis_backends=[dict(type='LocalVisBackend'), dict(type='WandbVisBackend')])
+default_hooks = dict(param_scheduler=dict(lr_factor=lr_factor))
