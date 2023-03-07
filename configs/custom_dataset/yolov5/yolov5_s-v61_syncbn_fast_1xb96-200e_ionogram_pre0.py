@@ -1,24 +1,22 @@
 _base_ = './yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py'
 
+# ========================modified parameters======================
+# -----data related-----
 work_dir = './work_dirs/yolov5_s_100e_pre0'
 
+# -----train val related-----
 base_lr = _base_.base_lr * 4
-optim_wrapper = dict(optimizer=dict(lr=base_lr))
 max_epochs=200
+load_from = None
+logger_interval = 50
 
 train_cfg = dict(
     max_epochs=max_epochs,
-    val_begin=20,
 )
 
+# =======================Unmodified in most cases==================
+optim_wrapper = dict(optimizer=dict(lr=base_lr))
+
 default_hooks = dict(
-    checkpoint=dict(
-        type='CheckpointHook',
-        interval=2,
-        max_keep_ckpts=1,
-        save_best='auto'),
     param_scheduler=dict(max_epochs=max_epochs),
-    logger=dict(type='LoggerHook', interval=50))
-
-
-load_from = None
+    logger=dict(type='LoggerHook', interval=logger_interval))

@@ -161,7 +161,7 @@ Model Parameters: 7.036M
 python tools/train.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
-调试技巧：在调试代码的过程中，有时需要训练几个 epoch，例如调试验证过程或者权重的保存是否符合期望。对于继承自 `BaseDataset` 的数据集（如本案例中的 `YOLOv5CocoDataset`），在 `train_dataloader` 中的 `dataset` 字段设置 `indices` 参数，即可指定每个 epoch 迭代的样本数，减少迭代时间。
+调试技巧：在调试代码的过程中，有时需要训练几个 epoch，例如调试验证过程或者权重的保存是否符合期望。对于继承自 `BaseDataset` 的数据集（如本案例中的 `YOLOv5CocoDataset`），在 `train_dataloader` 中的 `dataset` 字段增加 `indices` 参数，即可指定每个 epoch 迭代的样本数，减少迭代时间。
 
 ```python
 train_dataloader = dict(
