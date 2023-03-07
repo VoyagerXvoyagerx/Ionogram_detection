@@ -161,7 +161,28 @@ Model Parameters: 7.036M
 python tools/train.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
-2. 测试
+调试技巧：在调试代码的过程中，有时需要训练几个 epoch，例如调试验证过程或者权重的保存是否符合期望。对于继承自 `BaseDataset` 的数据集（如本案例中的 `YOLOv5CocoDataset`），在 `train_dataloader` 中的 `dataset` 字段设置 `indices` 参数，即可指定每个 epoch 迭代的样本数，减少迭代时间。
+
+```python
+train_dataloader = dict(
+    batch_size=train_batch_size_per_gpu,
+    num_workers=train_num_workers,
+    dataset=dict(
+        _delete_=True,
+        type='RepeatDataset',
+        times=1,
+        dataset=dict(
+            type=_base_.dataset_type,
+            indices=200,  # 设置 indices=200，表示每个 epoch 只迭代 200 个样本
+            data_root=data_root,
+            metainfo=metainfo,
+            ann_file=train_ann_file,
+            data_prefix=dict(img=train_data_prefix),
+            filter_cfg=dict(filter_empty_gt=False, min_size=32),
+            pipeline=_base_.train_pipeline)))
+```
+
+1. 测试
 
 ```bash
 python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py work_dirs/yolov5_s_100e/best_coco-test-0.584.pth
