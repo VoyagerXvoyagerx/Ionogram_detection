@@ -6,7 +6,7 @@
 
 数字频高图是获取电离层实时信息最重要的途径。电离层结构检测对精准提取电离层关键参数，具有非常重要的研究意义。
 
-利用中国科学院在海南、武汉、怀来获取的不同季节的4311张频高图建立数据集，人工标注出E层、Es-c层、Es-l层、F1层、F2层、Spread F层共6种结构。[Download](https://github.com/VoyagerXvoyagerx/Ionogram_detection/releases/download/Dataset/Iono4311.zip)
+利用中国科学院在海南、武汉、怀来获取的不同季节的4311张频高图建立数据集，人工标注出E层、Es-c层、Es-l层、F1层、F2层、Spread F层共6种结构。[数据集下载](https://github.com/VoyagerXvoyagerx/Ionogram_detection/releases/download/Dataset/Iono4311.zip)
 
 <div align=center>
 <img width="40%" src="https://user-images.githubusercontent.com/67947949/223638535-c4583d88-aa5a-4f21-b35a-e6e8328c9bd4.jpg"/>
@@ -19,7 +19,9 @@
 使用MMYOLO提供的 `tools/dataset_converters/labelme2coco.py` 脚本将 labelme 的 label 转换为 COCO label。
 
 ```bash
-python tools/dataset_converters/labelme2coco.py --img-dir ./Iono4311/images --labels-dir ./Iono4311/labels --out ./Iono4311/annotations/annotations_all.json
+python tools/dataset_converters/labelme2coco.py --img-dir ./Iono4311/images \
+                                                --labels-dir ./Iono4311/labels \
+                                                --out ./Iono4311/annotations/annotations_all.json
 ```
 
 2. 浏览数据集
@@ -27,7 +29,8 @@ python tools/dataset_converters/labelme2coco.py --img-dir ./Iono4311/images --la
 使用下面的命令可以将 COCO 的 label 在图片上进行显示，这一步可以验证刚刚转换是否有问题。
 
 ```bash
-python tools/analysis_tools/browse_coco_json.py --img-dir ./Iono4311/images --ann-file ./Iono4311/annotations/annotations_all.json
+python tools/analysis_tools/browse_coco_json.py --img-dir ./Iono4311/images \
+                                                --ann-file ./Iono4311/annotations/annotations_all.json
 ```
 
 3. 划分训练集、验证集、测试集
@@ -129,7 +132,7 @@ E、Es-l、Esc、F1 类别以小目标居多，F2、Fspread 类主要是中等�
 
 ```bash
 python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
---out-dir output --show-interval 1
+                                              --out-dir output --show-interval 1
 ```
 
 根据配置文件中的 `train_pipeline`，训练时采用的数据增强策略包括：
@@ -213,7 +216,8 @@ train_dataloader = dict(
 2. 测试
 
 ```bash
-python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py work_dirs/yolov5_s_100e/best_coco-test-0.584.pth
+python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
+                     work_dirs/yolov5_s_100e/best_coco-test-0.584.pth
 ```
 
 ## 实验与结果分析
@@ -226,8 +230,8 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb9
 
 硬件信息：
 
-- GPU：V100 32G
-- CPU：10核40G
+- GPU：V100，显存 32G
+- CPU：10核，内存 40G
 
 实验结果：
 
