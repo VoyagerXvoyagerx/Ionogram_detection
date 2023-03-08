@@ -1,4 +1,6 @@
-# 基于 YOLO 系列算法的频高图度量 benchmark
+# MMYOLO 应用案例
+
+基于 YOLO 系列算法的频高图度量 benchmark。
 
 ## 数据集构建
 
@@ -58,7 +60,33 @@ Iono4311/
 └── val_images
 ```
 
-使用 [/tools/dataset_analysis.ipynb](OpenMMLabCamp/detection/ionogram_detection/tools/dataset_analysis.ipynb) 计算数据集中各类别实例数量：
+使用以下代码可以统计数据集中各类别的实例数量：
+
+```python
+import json
+import numpy as np
+import pandas as pd
+
+
+# 指定标注文件路径
+ann_file_all = '/home/ubuntu/ionogram_detection/Iono4311/annotations/annotations_all.json'
+ann_file_train = '/home/ubuntu/ionogram_detection/Iono4311/annotations/train.json'
+ann_file_val = '/home/ubuntu/ionogram_detection/Iono4311/annotations/val.json'
+ann_file_test = '/home/ubuntu/ionogram_detection/Iono4311/annotations/test.json'
+
+for index, filename in enumerate((ann_file_all, ann_file_train, ann_file_val, ann_file_test)):
+    with open(filename, 'r') as f:
+        annotations = json.load(f)
+    dataset = pd.DataFrame(np.zeros((1, 6), dtype=int), columns=['E', 'Esl', 'Esc', 'F1', 'F2', 'Fspread'])
+    for ins in annotations["annotations"]:
+        dataset.iloc[0, ins["category_id"]-1] += 1
+    set_name = filename.split('/')
+    print(set_name[-1][: -5], len(annotations["images"]), 'images')
+    print(dataset, '\n')
+    f.close()
+```
+
+得到如下输出，说明本数据集存在样本分布不均衡的现象。
 
 ```python
 annotations_all 4311 images
