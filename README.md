@@ -12,7 +12,7 @@
 
 1. 数据集格式转换
 
-使用MMYOLO提供的脚本将 labelme 的 label 转换为 COCO label。
+使用MMYOLO提供的 `tools/dataset_converters/labelme2coco.py` 脚本将 labelme 的 label 转换为 COCO label。
 
 ```bash
 python tools/dataset_converters/labelme2coco.py --img-dir ./Iono4311/images --labels-dir ./Iono4311/labels --out ./Iono4311/annotations/annotations_all.json
@@ -82,9 +82,9 @@ test 646 images
 
 1. 配置文件
 
-配置文件在目录[/configs/custom_dataset](/detection/ionogram_detection/config/custom_dataset)下。
+配置文件在目录 `/configs/custom_dataset` 下。
 
-2. 数据集可视化分析
+1. 数据集可视化分析
 
 ```bash
 python tools/analysis_tools/dataset_analysis.py configs/custom_dataset/yolov5_s-v61_syncbn_fast_1xb32-50e_ionogram.py \
@@ -125,7 +125,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5/yolo
 
 4. 修改 Anchor 尺寸
 
-使用分析工具中的 `optimize_anchors.py` 脚本得到适用于本数据集的先验锚框尺寸。
+使用分析工具中的 `tools/analysis_tools/optimize_anchors.py` 脚本得到适用于本数据集的先验锚框尺寸。
 
 ```bash
 python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
@@ -137,13 +137,13 @@ python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5/yo
 
 5. 模型复杂度分析
 
-根据配置文件，使用分析工具中的 `get_flops.py` 脚本可以得到模型的参数量、浮点计算量等信息。以 YOLOv5-s 为例：
+根据配置文件，使用分析工具中的 `tools/analysis_tools/get_flops.py` 脚本可以得到模型的参数量、浮点计算量等信息。以 YOLOv5-s 为例：
 
 ```bash
 python tools/analysis_tools/get_flops.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
-得到的输出如下，表示模型的浮点运算量为 7.947G，一共有 7.036M 个可学习参数。
+得到如下输出，表示模型的浮点运算量为 7.947G，一共有 7.036M 个可学习参数。
 
 ```bash
 ==============================
@@ -161,7 +161,7 @@ Model Parameters: 7.036M
 python tools/train.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
-调试技巧：在调试代码的过程中，有时需要训练几个 epoch，例如调试验证过程或者权重的保存是否符合期望。对于继承自 `BaseDataset` 的数据集（如本案例中的 `YOLOv5CocoDataset`），在 `train_dataloader` 中的 `dataset` 字段增加 `indices` 参数，即可指定每个 epoch 迭代的样本数，减少迭代时间。
+调试技巧：在调试代码的过程中，有时需要训练几个 epoch，例如调试验证过程或者权重的保存是否符合期望。对于继承自 `BaseDataset` 的数据集（如本范例中的 `YOLOv5CocoDataset`），在 `train_dataloader` 中的 `dataset` 字段增加 `indices` 参数，即可指定每个 epoch 迭代的样本数，减少迭代时间。
 
 ```python
 train_dataloader = dict(
@@ -268,53 +268,3 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb9
 | YOLOv7-tiny | 100(78)     | 6.57     | 6.02      | Coco     | 0.549   | 0.568    | [config](./configs/custom_dataset/yolov7/yolov7_tiny_syncbn_fast_1xb16-100e_ionogram.py)     | [log](./logs/yolov7_tiny_20230215_202837.json) |
 | YOLOv7-x    | 100(58)     | 94.27    | 70.85     | Coco     | 0.602   | 0.595    | [config](./configs/custom_dataset/yolov7/yolov7_x_syncbn_fast_1xb16-100e_ionogram.py)        | [log](./logs/yolov7_x_20230110_165832.json)    |
 | rtmdet-s    | 100(64)     | 14.76    | 8.86      | Coco     | 0.581   | 0.571    | [config](./configs/custom_dataset/rtmdet/rtmdet_s_syncbn_fast_1xb8-100e_ionogram.py)         | [log](./logs/rtmdet_s_20230215_211817.json)    |
-
-## 自定义数据集 config 修改经验
-
-### 必须要修改的项目
-
-- \_base\_
-- work_dir
-
-### 使用新的模型训练自定义数据集
-
-继承自官方config
-
-- visualizer
-- dataset settings
-  - data_root
-  - num_classes
-  - metainfo
-    - palette
-    - class_name
-  - img_scale
-- train, val, test
-  - batch_size, num_workers
-  - train_cfg
-    - max_epochs, save_epoch_intervals, val_begin
-  - default_hooks
-    - max_keep_ckpts
-    - save_best
-  - lr
-  - val_dataloder, test_dataloader
-    - metainfo
-    - root
-  - val_evaluator, test_evaluator
-
-### 只修改模型尺寸时
-
-继承自修改过的config
-
-- num_classes related (e.g. loss_cls)
-- load_from
-- 官方config中的内容
-
-### 模型尺寸不变，只修改训练策略时
-
-继承自修改过的config
-根据实验需要修改config内容
-
-## To Do
-
-- 根据 mmyolo 0.6.0 的样式美化配置文件。
-- 测试数据集中不同类别的精度。
