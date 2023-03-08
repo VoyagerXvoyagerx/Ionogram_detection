@@ -108,9 +108,7 @@ test 646 images
 0  293  123  127  297  623       22
 ```
 
-## 模型配置
-
-1. 配置文件
+## 配置文件
 
 配置文件在目录 `/configs/custom_dataset` 下。
 
@@ -125,7 +123,7 @@ python tools/analysis_tools/dataset_analysis.py configs/custom_dataset/yolov5_s-
 
 E、Es-l、Esc、F1 类别以小目标居多，F2、Fspread 类主要是中等大小目标。
 
-3. 可视化config中的数据处理部分
+2. 可视化config中的数据处理部分
 
 以 YOLOv5-s 为例：
 
@@ -144,7 +142,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5/yolo
 
 修改 `train_pipeline` 并可视化不同的数据增强方法：
 
-|Aug Method|[config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_aug0.py) |[config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram_mosaic.py) | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine.py) | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) |
+|Aug Method|[config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_aug0.py) |[config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram_mosaic.py) | [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine.py) | [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) |
 |--------|-----------------|------------------|------------------|------------------|
 | Mosaic |                 | √                | √                | √                |
 | Affine |                 |                  | √                | √                |
@@ -153,7 +151,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5/yolo
 | Flip   |                 |                  |                  | √                |
 | 可视化 | <img src="https://user-images.githubusercontent.com/67947949/223640764-2f9798a5-90d7-4b69-9fd1-d0f54fae0433.png"/> | <img  src="https://user-images.githubusercontent.com/67947949/223640628-1ed7e911-8339-4c03-adcb-77eb3abe5a4c.png"/> |<img src="https://user-images.githubusercontent.com/67947949/223640839-df347b96-b649-4795-acf6-f1f42f53f9ea.png"/>| <img  src="https://user-images.githubusercontent.com/67947949/223640915-cd4dea0e-ac9f-43a8-a32c-fd81468ce187.png"/> |
 
-4. 修改 Anchor 尺寸
+3. 修改 Anchor 尺寸
 
 使用分析工具中的 `tools/analysis_tools/optimize_anchors.py` 脚本得到适用于本数据集的先验锚框尺寸。
 
@@ -165,7 +163,7 @@ python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5/yo
                                                 --out-dir work_dirs/dataset_analysis_5_s
 ```
 
-5. 模型复杂度分析
+4. 模型复杂度分析
 
 根据配置文件，使用分析工具中的 `tools/analysis_tools/get_flops.py` 脚本可以得到模型的参数量、浮点计算量等信息。以 YOLOv5-s 为例：
 
@@ -260,7 +258,7 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb9
 
 #### 不同数据增强方法
 
-| Aug Method |   [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_aug0.py)    |    [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram_mosaic.py)   |  [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine.py)   | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine_albu_hsv.py)      | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py)      |
+| Aug Method |   [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_aug0.py)    |    [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb32-100e_ionogram_mosaic.py)   |  [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine.py)   | [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram_mosaic_affine_albu_hsv.py)      | [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py)      |
 |------------|-------|-------|-------|-------|-------|
 | Mosaic     |       | √     | √     | √     | √     |
 | Affine     |       |       | √     | √     | √     |
@@ -277,10 +275,10 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb9
 
 | Model    | Epoch(best) | FLOPs(G) | Params(M) | Pretrain | Val mAP | Config  |
 |----------|-------------|----------|-----------|----------|---------|---------|
-| YOLOv5-s | 100(82)     | 7.95     | 7.04      | Coco     | 0.575   | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) |
-| YOLOv5-s | 200(145)    | 7.95     | 7.04      | None     | 0.565   | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-200e_ionogram_pre0.py) |
-| YOLOv6-s | 100(54)     | 24.2     | 18.84     | Coco     | 0.584   | [config](./configs/custom_dataset/yolov6/yolov6_s_syncbn_fast_1xb32-100e_ionogram.py) |
-| YOLOv6-s | 200(188)    | 24.2     | 18.84     | None     | 0.557   | [config](./configs/custom_dataset/yolov6/yolov6_s_syncbn_fast_1xb32-200e_ionogram_pre0.py) |
+| YOLOv5-s | 100(82)     | 7.95     | 7.04      | Coco     | 0.575   | [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) |
+| YOLOv5-s | 200(145)    | 7.95     | 7.04      | None     | 0.565   | [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-200e_ionogram_pre0.py) |
+| YOLOv6-s | 100(54)     | 24.2     | 18.84     | Coco     | 0.584   | [config](/projects/misc/ionogram_detection/yolov6/yolov6_s_syncbn_fast_1xb32-100e_ionogram.py) |
+| YOLOv6-s | 200(188)    | 24.2     | 18.84     | None     | 0.557   | [config](/projects/misc/ionogram_detection/yolov6/yolov6_s_syncbn_fast_1xb32-200e_ionogram_pre0.py) |
 
 <div align=center>
 <img width="60%" src="https://user-images.githubusercontent.com/67947949/223641016-9ded0d11-62b8-45f4-be5b-bd4ffae3ec21.png">
@@ -294,11 +292,11 @@ python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb9
 
 | Model       | epoch(best) | FLOPs(G) | Params(M) | pretrain | val mAP | test mAP | Config                                                           | Log                                           |
 |-------------|-------------|----------|-----------|----------|---------|----------|------------------------------------------------------------------|-----------------------------------------------|
-| YOLOv5-s    | 100(82)     | 7.95     | 7.04      | Coco     | 0.575   | 0.584    | [config](./configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) | [log](./logs/yolov5_s_20230105_213510.json)    |
-| YOLOv5-m    | 100(70)     | 24.05    | 20.89     | Coco     | 0.587   | 0.586    | [config](./configs/custom_dataset/yolov5/yolov5_m-v61_syncbn_fast_1xb32-100e_ionogram.py)    | [log](./logs/yolov5_m_20230106_004642.json)    |
-| YOLOv6-s    | 100(54)     | 24.2     | 18.84     | Coco     | 0.584   | 0.594    | [config](./configs/custom_dataset/yolov6/yolov6_s_syncbn_fast_1xb32-100e_ionogram.py)        | [log](./logs/yolov6_s_20230107_003207.json)    |
-| YOLOv6-m    | 100(76)     | 37.08    | 44.42     | Coco     | 0.590   | 0.590    | [config](./configs/custom_dataset/yolov6/yolov6_m_syncbn_fast_1xb32-100e_ionogram.py)        | [log](./logs/yolov6_m_20230107_201029.json)    |
-| YOLOv6-l    | 100(76)     | 71.33    | 58.47     | Coco     | 0.605   | 0.597    | [config](./configs/custom_dataset/yolov6/yolov6_l_syncbn_fast_1xb32-100e_ionogram.py)        | [log](./logs/yolov6_l_20230108_005634.json)    |
-| YOLOv7-tiny | 100(78)     | 6.57     | 6.02      | Coco     | 0.549   | 0.568    | [config](./configs/custom_dataset/yolov7/yolov7_tiny_syncbn_fast_1xb16-100e_ionogram.py)     | [log](./logs/yolov7_tiny_20230215_202837.json) |
-| YOLOv7-x    | 100(58)     | 94.27    | 70.85     | Coco     | 0.602   | 0.595    | [config](./configs/custom_dataset/yolov7/yolov7_x_syncbn_fast_1xb16-100e_ionogram.py)        | [log](./logs/yolov7_x_20230110_165832.json)    |
-| rtmdet-s    | 100(64)     | 14.76    | 8.86      | Coco     | 0.581   | 0.571    | [config](./configs/custom_dataset/rtmdet/rtmdet_s_syncbn_fast_1xb8-100e_ionogram.py)         | [log](./logs/rtmdet_s_20230215_211817.json)    |
+| YOLOv5-s    | 100(82)     | 7.95     | 7.04      | Coco     | 0.575   | 0.584    | [config](/projects/misc/ionogram_detection/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py) | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/yolov5_s_20230105_213510.json)    |
+| YOLOv5-m    | 100(70)     | 24.05    | 20.89     | Coco     | 0.587   | 0.586    | [config](/projects/misc/ionogram_detection/yolov5/yolov5_m-v61_syncbn_fast_1xb32-100e_ionogram.py)    | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/yolov5_m_20230106_004642.json)    |
+| YOLOv6-s    | 100(54)     | 24.2     | 18.84     | Coco     | 0.584   | 0.594    | [config](/projects/misc/ionogram_detection/yolov6/yolov6_s_syncbn_fast_1xb32-100e_ionogram.py)        | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/yolov6_s_20230107_003207.json)    |
+| YOLOv6-m    | 100(76)     | 37.08    | 44.42     | Coco     | 0.590   | 0.590    | [config](/projects/misc/ionogram_detection/yolov6/yolov6_m_syncbn_fast_1xb32-100e_ionogram.py)        | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/yolov6_m_20230107_201029.json)    |
+| YOLOv6-l    | 100(76)     | 71.33    | 58.47     | Coco     | 0.605   | 0.597    | [config](/projects/misc/ionogram_detection/yolov6/yolov6_l_syncbn_fast_1xb32-100e_ionogram.py)        | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/yolov6_l_20230108_005634.json)    |
+| YOLOv7-tiny | 100(78)     | 6.57     | 6.02      | Coco     | 0.549   | 0.568    | [config](/projects/misc/ionogram_detection/yolov7/yolov7_tiny_syncbn_fast_1xb16-100e_ionogram.py)     | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/yolov7_tiny_20230215_202837.json) |
+| YOLOv7-x    | 100(58)     | 94.27    | 70.85     | Coco     | 0.602   | 0.595    | [config](/projects/misc/ionogram_detection/yolov7/yolov7_x_syncbn_fast_1xb16-100e_ionogram.py)        | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/yolov7_x_20230110_165832.json)    |
+| rtmdet-s    | 100(64)     | 14.76    | 8.86      | Coco     | 0.581   | 0.571    | [config](/projects/misc/ionogram_detection/rtmdet/rtmdet_s_syncbn_fast_1xb8-100e_ionogram.py)         | [log](https://github.com/VoyagerXvoyagerx/Ionogram_detection/blob/main/logs/rtmdet_s_20230215_211817.json)    |
