@@ -18,7 +18,7 @@
 
 使用MMYOLO提供的 `tools/dataset_converters/labelme2coco.py` 脚本将 labelme 的 label 转换为 COCO label。
 
-```bash
+```shell
 python tools/dataset_converters/labelme2coco.py --img-dir ./Iono4311/images \
                                                 --labels-dir ./Iono4311/labels \
                                                 --out ./Iono4311/annotations/annotations_all.json
@@ -28,7 +28,7 @@ python tools/dataset_converters/labelme2coco.py --img-dir ./Iono4311/images \
 
 使用下面的命令可以将 COCO 的 label 在图片上进行显示，这一步可以验证刚刚转换是否有问题。
 
-```bash
+```shell
 python tools/analysis_tools/browse_coco_json.py --img-dir ./Iono4311/images \
                                                 --ann-file ./Iono4311/annotations/annotations_all.json
 ```
@@ -37,7 +37,7 @@ python tools/analysis_tools/browse_coco_json.py --img-dir ./Iono4311/images \
 
 设置70%的图片为训练集，15%作为验证集，15%为测试集。
 
-```bash
+```shell
 python tools/misc/coco_split.py --json ./Iono4311/annotations/annotations_all.json \
                                 --out-dir ./Iono4311/annotations \
                                 --ratios 0.7 0.15 0.15 \
@@ -47,7 +47,7 @@ python tools/misc/coco_split.py --json ./Iono4311/annotations/annotations_all.js
 
 划分后的 File tree:
 
-```bash
+```shell
 Iono4311/
 ├── annotations
 │   ├── annotations_all.json
@@ -117,7 +117,7 @@ test 646 images
 
 1. 数据集可视化分析
 
-```bash
+```shell
 python tools/analysis_tools/dataset_analysis.py configs/custom_dataset/yolov5_s-v61_syncbn_fast_1xb32-50e_ionogram.py \
                                                 --out-dir output
 ```
@@ -130,7 +130,7 @@ E、Es-l、Esc、F1 类别以小目标居多，F2、Fspread 类主要是中等�
 
 以 YOLOv5-s 为例：
 
-```bash
+```shell
 python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
                                               --out-dir output --show-interval 1
 ```
@@ -158,7 +158,7 @@ python tools/analysis_tools/browse_dataset.py configs/custom_dataset/yolov5/yolo
 
 使用分析工具中的 `tools/analysis_tools/optimize_anchors.py` 脚本得到适用于本数据集的先验锚框尺寸。
 
-```bash
+```shell
 python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
                                                 --algorithm v5-k-means \
                                                 --input-shape 640 640 \
@@ -170,13 +170,13 @@ python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5/yo
 
 根据配置文件，使用分析工具中的 `tools/analysis_tools/get_flops.py` 脚本可以得到模型的参数量、浮点计算量等信息。以 YOLOv5-s 为例：
 
-```bash
+```shell
 python tools/analysis_tools/get_flops.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
 得到如下输出，表示模型的浮点运算量为 7.947G，一共有 7.036M 个可学习参数。
 
-```bash
+```shell
 ==============================
 Input shape: torch.Size([640, 640])
 Model Flops: 7.947G
@@ -188,7 +188,7 @@ Model Parameters: 7.036M
 
 1. 训练
 
-```bash
+```shell
 python tools/train.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py
 ```
 
@@ -215,7 +215,7 @@ train_dataloader = dict(
 
 2. 测试
 
-```bash
+```shell
 python tools/test.py configs/custom_dataset/yolov5/yolov5_s-v61_syncbn_fast_1xb96-100e_ionogram.py \
                      work_dirs/yolov5_s_100e/best_coco-test-0.584.pth
 ```
