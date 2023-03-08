@@ -1,12 +1,10 @@
 # MMYOLO 应用案例
 
-基于 MMYOLO 的频高图实时目标检测 benchmark。
+基于 YOLO 系列算法的频高图度量 benchmark。
 
 ## 数据集构建
 
-数字频高图是获取电离层实时信息最重要的途径。电离层结构检测对精准提取电离层关键参数，具有非常重要的研究意义。
-
-利用中国科学院在海南、武汉、怀来获取的不同季节的4311张频高图建立数据集，人工标注出E层、Es-c层、Es-l层、F1层、F2层、Spread F层共6种结构。[Download](https://github.com/VoyagerXvoyagerx/Ionogram_detection/releases/download/Dataset/Iono4311.zip)
+Digital frequency map is the most important way to obtain real-time ionospheric information. Ionospheric structure detection is of great research significance for accurate extraction of ionospheric key parameters.
 
 <div align=center>
 <img width="40%" src="https://user-images.githubusercontent.com/67947949/223638535-c4583d88-aa5a-4f21-b35a-e6e8328c9bd4.jpg"/>
